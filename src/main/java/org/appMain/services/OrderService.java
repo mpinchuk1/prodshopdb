@@ -1,6 +1,9 @@
 package org.appMain.services;
 
-import org.appMain.entities.*;
+import org.appMain.entities.Customer;
+import org.appMain.entities.Order;
+import org.appMain.entities.Product;
+import org.appMain.entities.Storage;
 import org.appMain.repo.CustomerRepository;
 import org.appMain.repo.OrderRepository;
 import org.appMain.repo.ProductRepository;
@@ -28,20 +31,20 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(Seller seller, List<Product> requiredProducts, Customer customer){
+    public void addOrder(List<Product> requiredProducts, Customer customer) {
         List<Product> toOrder = new ArrayList<>();
-        for(Product p: requiredProducts){
-            if(p.getForAdult() && customer.getAge() < 18)
+        for (Product p : requiredProducts) {
+            if (p.getForAdult() && customer.getAge() < 18)
                 System.out.println("Customer(" + customer.getFirstName() + " " + customer.getLastName()
                         + ") age is " + customer.getAge() + ". \n He can't buy " + p.getName());
-            else{
+            else {
                 Product product = productRepository.findProductByName(p.getName());
                 Storage productItem = storageRepository.findByProduct(product);
-                if(productItem == null){
+                if (productItem == null) {
                     continue;
                 }
                 int prodQuantity = productItem.getQuantity();
-                if(prodQuantity > 0){
+                if (prodQuantity > 0) {
                     toOrder.add(product);
                     int newQuantity = prodQuantity - 1;
                     productItem.setQuantity(newQuantity);
@@ -53,7 +56,7 @@ public class OrderService {
             }
         }
         if(toOrder.size() > 0){
-            Order order = new Order(toOrder, seller, customer);
+            Order order = new Order(toOrder, customer);
             System.out.println("New order has created: " + order);
             customerRepository.save(customer);
             orderRepository.save(order);

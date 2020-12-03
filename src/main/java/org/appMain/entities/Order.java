@@ -20,9 +20,6 @@ public class Order {
     private List<Product> orderedProduct;
     private Double price;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
     private Date orderDate;
@@ -32,9 +29,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(List<Product> orderedProduct, Seller seller, Customer customer) {
+    public Order(List<Product> orderedProduct, Customer customer) {
         this.orderedProduct = orderedProduct;
-        this.seller = seller;
         this.customer = customer;
         this.price = countPrice(orderedProduct);
         this.orderDate = c.getTime();
@@ -56,10 +52,6 @@ public class Order {
         return price;
     }
 
-    public Seller getSeller() {
-        return seller;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -74,7 +66,6 @@ public class Order {
                 "id=" + id +
                 ", product=" + orderedProduct +
                 ", price=" + price +
-                ", seller=" + seller +
                 ", customer=" + customer +
                 ", orderDate=" + orderDate +
                 ", c=" + c +
