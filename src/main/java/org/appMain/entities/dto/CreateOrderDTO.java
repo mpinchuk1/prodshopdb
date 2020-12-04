@@ -1,20 +1,20 @@
 package org.appMain.entities.dto;
 
-import org.appMain.entities.Customer;
+import org.appMain.entities.CustomUser;
 import org.appMain.entities.Product;
 
 import java.util.List;
 
 public class CreateOrderDTO {
-    private Customer customer;
+    private CustomUser customUser;
     private List<Product> products;
 
-    public Customer getCustomer() {
-        return customer;
+    public CustomUser getCustomer() {
+        return customUser;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(CustomUser customUser) {
+        this.customUser = customUser;
     }
 
     public List<Product> getProducts() {

@@ -21,7 +21,7 @@ public class Order {
     private Double price;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private CustomUser customUser;
     private Date orderDate;
     @Transient
     private final Calendar c = Calendar.getInstance();
@@ -29,9 +29,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(List<Product> orderedProduct, Customer customer) {
+    public Order(List<Product> orderedProduct, CustomUser customUser) {
         this.orderedProduct = orderedProduct;
-        this.customer = customer;
+        this.customUser = customUser;
         this.price = countPrice(orderedProduct);
         this.orderDate = c.getTime();
     }
@@ -52,8 +52,8 @@ public class Order {
         return price;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public CustomUser getCustomer() {
+        return customUser;
     }
 
     public Date getOrderDate() {
@@ -66,7 +66,7 @@ public class Order {
                 "id=" + id +
                 ", product=" + orderedProduct +
                 ", price=" + price +
-                ", customer=" + customer +
+                ", customer=" + customUser +
                 ", orderDate=" + orderDate +
                 ", c=" + c +
                 '}';

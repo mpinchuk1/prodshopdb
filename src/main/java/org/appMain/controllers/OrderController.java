@@ -1,6 +1,6 @@
 package org.appMain.controllers;
 
-import org.appMain.entities.Customer;
+import org.appMain.entities.CustomUser;
 import org.appMain.entities.Product;
 import org.appMain.entities.dto.CreateOrderDTO;
 import org.appMain.entities.dto.OrdersDTO;
@@ -24,9 +24,9 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Void> createOrder(@RequestBody CreateOrderDTO createOrder){
-        Customer customer = createOrder.getCustomer();
+        CustomUser customUser = createOrder.getCustomer();
         List<Product> products = createOrder.getProducts();
-        orderService.addOrder(products, customer);
+        orderService.addOrder(products, customUser);
         return ResponseEntity.ok().build();
     }
 
