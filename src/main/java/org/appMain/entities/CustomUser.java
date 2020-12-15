@@ -1,44 +1,39 @@
 package org.appMain.entities;
 
+import org.appMain.utils.UserRole;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class CustomUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
     private String firstName;
     private String lastName;
     private Date registrationDate;
     private String login;
     private String password;
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     private String email;
 
     public CustomUser() {
-
     }
 
     public CustomUser(String firstName, String lastName, String login, String password,
-                      String email, Role role) {
+                      String email, UserRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.registrationDate = new Date();
         this.login = login;
         this.password = password;
         this.email = email;
-        roles.add(role);
+        this.role = role;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -90,8 +85,8 @@ public class CustomUser {
         this.email = email;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public UserRole getRole() {
+        return role;
     }
 
     @Override
@@ -103,7 +98,7 @@ public class CustomUser {
                 ", registrationDate=" + registrationDate +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", roles=" + roles +
+                ", roles=" + role +
                 ", email='" + email + '\'' +
                 '}';
     }

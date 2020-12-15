@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="ProdShopDB:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProdShopDB_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="ProdShopDB/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="ProdShopDB" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

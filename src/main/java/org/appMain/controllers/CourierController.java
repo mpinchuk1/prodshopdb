@@ -9,7 +9,10 @@ import org.appMain.services.CourierService;
 import org.appMain.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +31,7 @@ public class CourierController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> deliverProducts(@RequestBody String deliverJson){
+    public ResponseEntity<Void> deliverProducts(@RequestBody String deliverJson) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         DeliveryDTO deliver = gson.fromJson(deliverJson, DeliveryDTO.class);
         List<Product> toStorage = deliver.getProducts();
@@ -39,7 +42,7 @@ public class CourierController {
         Date currentDate = calendar.getTime();
 
         courierService.addCourier(courier);
-        for(Product p: toStorage){
+        for (Product p : toStorage) {
             p.setDeliveryDate(currentDate);
             p.setDeliveredBy(courier);
             productService.addProduct(p);

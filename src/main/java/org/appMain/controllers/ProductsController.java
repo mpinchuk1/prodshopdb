@@ -20,7 +20,8 @@ public class ProductsController {
     }
 
     @GetMapping
-    public @ResponseBody ProductsDTO getAllProducts(){
+    public @ResponseBody
+    ProductsDTO getAllProducts() {
         ProductsDTO productsDTO = new ProductsDTO();
         productsDTO.setProducts(productService.getAllProduct());
         return productsDTO;

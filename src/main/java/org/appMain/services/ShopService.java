@@ -28,10 +28,10 @@ public class ShopService {
     }
 
     @Transactional
-    public void filterExpiredProducts(){
+    public void filterExpiredProducts() {
         List<Product> products = productRepository.findAll();
-        for(Product p: products){
-            if(p.getExpireDate().before(this.currentDate)){
+        for (Product p : products) {
+            if (p.getExpireDate().before(this.currentDate)) {
                 System.out.println("There is an expired product: " + p + ". \n It will be disposed of!");
                 Storage storage = storageRepository.findByProduct(p);
                 storageRepository.delete(storage);

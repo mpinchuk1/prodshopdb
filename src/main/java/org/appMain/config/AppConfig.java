@@ -1,33 +1,36 @@
 package org.appMain.config;
 
 import org.appMain.entities.CustomUser;
-import org.appMain.entities.Role;
-import org.appMain.repo.RoleRepository;
 import org.appMain.repo.UserRepository;
+import org.appMain.utils.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppConfig {
+
     @Bean
-    public CommandLineRunner demo(final RoleRepository roleRepository, final UserRepository userRepository) {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CommandLineRunner demo(final UserRepository userRepository,
+                                  final PasswordEncoder encoder) {
         return (strings) -> {
 
-            Role admin = new Role("ADMIN");
-            Role user = new Role("USER");
-
-            roleRepository.save(admin);
-            roleRepository.save(user);
-
-            CustomUser user1 = new CustomUser("Maksym", "Pinchuk", "mpinchuk", "qwerty", "mmpinchuk@gmail.com", admin);
-            CustomUser user2 = new CustomUser("Ilia267", "Minchuk", "iminchuk", "qwerty", "iminchuk@gmail.com", null);
-            CustomUser user3 = new CustomUser("Andr", "Andr", "andrandr", "qwerty", "andr@gmail.com", user);
-            CustomUser user4 = new CustomUser("Sasha", "Sashkevich", "ssashkevich", "qwerty", "ssashkevich@gmail.com", user);
-            CustomUser user5 = new CustomUser("Maksym", "Kapolin", "mkapolin", "qwerty", null, user);
-            CustomUser user6 = new CustomUser("Nikita", "Nikitin", "nnikitin", "qwerty", "nnikitin@gmail.com", user);
-            CustomUser user7 = new CustomUser("Denis", "Lopatin", "dlopatin", "qwerty", "dlopatin@gmail.com", user);
+            CustomUser user1 = new CustomUser("Maksym", "Pinchuk", "mpinchuk", encoder.encode("qwerty"), "mmpinchuk@gmail.com", UserRole.ADMIN);
+            CustomUser user2 = new CustomUser("Ilia267", "Minchuk", "iminchuk", encoder.encode("qwerty"), "iminchuk@gmail.com", UserRole.USER);
+            CustomUser user3 = new CustomUser("Andr", "Andr", "andrandr", encoder.encode("qwerty"), "andr@gmail.com", UserRole.USER);
+            CustomUser user4 = new CustomUser("Sasha", "Sashkevich", "ssashkevich", encoder.encode("qwerty"), "ssashkevich@gmail.com", UserRole.USER);
+            CustomUser user5 = new CustomUser("Maksym", "Kapolin", "mkapolin", encoder.encode("qwerty"), null, UserRole.USER);
+            CustomUser user6 = new CustomUser("Nikita", "Nikitin", "nnikitin", encoder.encode("qwerty"), "nnikitin@gmail.com", UserRole.USER);
+            CustomUser user7 = new CustomUser("Denis", "Lopatin", "dlopatin", encoder.encode("qwerty"), "dlopatin@gmail.com", UserRole.USER);
 
             userRepository.save(user1);
             userRepository.save(user2);
@@ -36,8 +39,6 @@ public class AppConfig {
             userRepository.save(user5);
             userRepository.save(user6);
             userRepository.save(user7);
-
-
         };
     }
 }

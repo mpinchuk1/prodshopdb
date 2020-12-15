@@ -5,14 +5,13 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "order_product",
             joinColumns = @JoinColumn(name = "order_id"),
@@ -36,11 +35,11 @@ public class Order {
         this.orderDate = c.getTime();
     }
 
-    public double countPrice(List<Product> products){
+    public double countPrice(List<Product> products) {
         return products.stream().mapToDouble(Product::getPrice).sum();
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

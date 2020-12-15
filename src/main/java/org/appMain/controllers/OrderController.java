@@ -23,7 +23,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createOrder(@RequestBody CreateOrderDTO createOrder){
+    public ResponseEntity<Void> createOrder(@RequestBody CreateOrderDTO createOrder) {
         CustomUser customUser = createOrder.getCustomer();
         List<Product> products = createOrder.getProducts();
         orderService.addOrder(products, customUser);
@@ -31,7 +31,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public @ResponseBody OrdersDTO getAllOrders(){
+    public @ResponseBody
+    OrdersDTO getAllOrders() {
         OrdersDTO ordersDTO = new OrdersDTO();
         ordersDTO.setOrders(orderService.getAllOrders());
         return ordersDTO;

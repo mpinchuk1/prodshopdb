@@ -23,8 +23,8 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(Product product){
-        if(productRepository.findProductByName(product.getName()) == null){
+    public void addProduct(Product product) {
+        if (productRepository.findProductByName(product.getName()) == null) {
             productRepository.save(product);
         }
     }

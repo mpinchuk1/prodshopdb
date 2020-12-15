@@ -19,8 +19,8 @@ public class ShopController {
     }
 
     @GetMapping
-    public ResponseEntity<Void> filterExpiredProducts(@RequestParam boolean filter){
-        if(filter)
+    public ResponseEntity<Void> filterExpiredProducts(@RequestParam boolean filter) {
+        if (filter)
             shopService.filterExpiredProducts();
         return ResponseEntity.ok().build();
     }

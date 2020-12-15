@@ -4,13 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.util.UUID;
 
 @Entity
 public class Storage {
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
     @OneToOne
     private Product product;
     private int quantity;
@@ -18,11 +17,11 @@ public class Storage {
     public Storage() {
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

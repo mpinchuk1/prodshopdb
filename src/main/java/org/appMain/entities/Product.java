@@ -5,13 +5,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
     private String name;
     private Double price;
     private Date deliveryDate;
@@ -34,7 +33,7 @@ public class Product {
         this.forAdult = forAdult;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -54,7 +53,7 @@ public class Product {
         return expireDate;
     }
 
-    public Courier getDeliveredBy(){
+    public Courier getDeliveredBy() {
         return deliveredBy;
     }
 

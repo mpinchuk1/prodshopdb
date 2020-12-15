@@ -24,20 +24,20 @@ public class CourierService {
     }
 
     @Transactional
-    public void addProductsToStorage(Courier courier, List<Product> toStorage, List<Integer> prodQuantities){
+    public void addProductsToStorage(Courier courier, List<Product> toStorage, List<Integer> prodQuantities) {
         courierRepository.save(courier);
 
-        for(int i = 0; i < toStorage.size(); i++){
+        for (int i = 0; i < toStorage.size(); i++) {
             Product prodTemp = toStorage.get(i);
             int prodQTemp = prodQuantities.get(i);
             Storage existsStorageItem = storageRepository.findByProduct(prodTemp);
 
-            if(existsStorageItem == null){
+            if (existsStorageItem == null) {
                 Storage storageItem = new Storage();
                 storageItem.setProduct(prodTemp);
                 storageItem.setQuantity(prodQTemp);
                 storageRepository.save(storageItem);
-            }else {
+            } else {
                 int productQuantity = existsStorageItem.getQuantity();
                 int newProductQuantity = productQuantity + prodQTemp;
                 existsStorageItem.setQuantity(newProductQuantity);
@@ -48,7 +48,7 @@ public class CourierService {
     }
 
     @Transactional
-    public void addCourier(Courier courier){
+    public void addCourier(Courier courier) {
         courierRepository.save(courier);
     }
 }

@@ -2,13 +2,12 @@ package org.appMain.entities;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class Courier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
     private String lastName;
     private String supplierCompanyName;
     @OneToMany(mappedBy = "deliveredBy")
@@ -29,7 +28,7 @@ public class Courier {
         return deliveryProducts;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
