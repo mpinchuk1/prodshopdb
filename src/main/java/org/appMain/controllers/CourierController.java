@@ -47,7 +47,7 @@ public class CourierController {
             p.setDeliveredBy(courier);
             productService.addProduct(p);
         }
-        courierService.addProductsToStorage(courier, toStorage, prodQuantities);
+        courierService.addProductsToStorage(toStorage, prodQuantities);
 
         return ResponseEntity.ok().build();
     }

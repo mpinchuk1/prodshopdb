@@ -1,7 +1,6 @@
 package org.appMain.controllers;
 
 import org.appMain.entities.CustomUser;
-import org.appMain.entities.dto.UserDTO;
 import org.appMain.security.CustomUserDetails;
 import org.appMain.services.UserService;
 import org.appMain.utils.UserRole;
@@ -15,10 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -33,12 +36,9 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping
-    public @ResponseBody
-    UserDTO getAllUsers() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setCustomers(userService.getAllUsers());
-        return userDTO;
+    @GetMapping("/getAllUsers")
+    public List<CustomUser> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @RequestMapping(value = "/newuser")

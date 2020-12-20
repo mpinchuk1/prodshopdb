@@ -16,6 +16,11 @@ public class Courier {
     public Courier() {
     }
 
+    public Courier(String lastName, String supplierCompanyName) {
+        this.lastName = lastName;
+        this.supplierCompanyName = supplierCompanyName;
+    }
+
     public String getLastName() {
         return lastName;
     }

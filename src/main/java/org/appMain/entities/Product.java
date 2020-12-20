@@ -1,6 +1,7 @@
 package org.appMain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +14,9 @@ public class Product {
     private Long id;
     private String name;
     private Double price;
+    @JsonFormat(pattern = "MMM dd, yyyy")
     private Date deliveryDate;
+    @JsonFormat(pattern = "MMM dd, yyyy")
     private Date expireDate;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

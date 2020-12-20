@@ -24,8 +24,7 @@ public class CourierService {
     }
 
     @Transactional
-    public void addProductsToStorage(Courier courier, List<Product> toStorage, List<Integer> prodQuantities) {
-        courierRepository.save(courier);
+    public void addProductsToStorage(List<Product> toStorage, List<Integer> prodQuantities) {
 
         for (int i = 0; i < toStorage.size(); i++) {
             Product prodTemp = toStorage.get(i);

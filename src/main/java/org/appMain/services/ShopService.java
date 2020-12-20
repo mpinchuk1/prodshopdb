@@ -4,6 +4,8 @@ import org.appMain.entities.Product;
 import org.appMain.entities.Storage;
 import org.appMain.repo.ProductRepository;
 import org.appMain.repo.StorageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class ShopService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShopService.class);
 
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
@@ -32,7 +36,7 @@ public class ShopService {
         List<Product> products = productRepository.findAll();
         for (Product p : products) {
             if (p.getExpireDate().before(this.currentDate)) {
-                System.out.println("There is an expired product: " + p + ". \n It will be disposed of!");
+                logger.info("There is an expired product: " + p + ". \n It will be disposed of!");
                 Storage storage = storageRepository.findByProduct(p);
                 storageRepository.delete(storage);
             }
