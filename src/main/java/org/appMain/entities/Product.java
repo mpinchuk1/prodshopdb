@@ -2,6 +2,7 @@ package org.appMain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,23 +18,24 @@ public class Product {
     @JsonFormat(pattern = "MMM dd, yyyy")
     private Date deliveryDate;
     @JsonFormat(pattern = "MMM dd, yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date expireDate;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "courier_id")
-    private Courier deliveredBy;
-    private Boolean forAdult;
+    @JoinColumn(name = "supplier_id")
+    private Supplier deliveredBy;
+
 
     public Product() {
     }
 
-    public Product(String name, Double price, Date expireDate, Courier deliveredBy, Boolean forAdult) {
+    public Product(String name, Double price, Date expireDate, Supplier deliveredBy) {
         this.name = name;
         this.price = price;
         this.deliveryDate = new Date();
         this.expireDate = expireDate;
         this.deliveredBy = deliveredBy;
-        this.forAdult = forAdult;
     }
 
     public Long getId() {
@@ -56,16 +58,32 @@ public class Product {
         return expireDate;
     }
 
-    public Courier getDeliveredBy() {
+    public Supplier getDeliveredBy() {
         return deliveredBy;
     }
 
-    public Boolean getForAdult() {
-        return forAdult;
+    public void setDeliveredBy(Supplier deliveredBy) {
+        this.deliveredBy = deliveredBy;
     }
 
-    public void setDeliveredBy(Courier deliveredBy) {
-        this.deliveredBy = deliveredBy;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
     }
 
     @Override
@@ -78,14 +96,13 @@ public class Product {
                 Objects.equals(getPrice(), product.getPrice()) &&
                 Objects.equals(deliveryDate, product.deliveryDate) &&
                 Objects.equals(getExpireDate(), product.getExpireDate()) &&
-                Objects.equals(getDeliveredBy(), product.getDeliveredBy()) &&
-                Objects.equals(getForAdult(), product.getForAdult());
+                Objects.equals(getDeliveredBy(), product.getDeliveredBy());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getPrice(),
-                deliveryDate, getExpireDate(), getDeliveredBy(), getForAdult());
+                deliveryDate, getExpireDate(), getDeliveredBy());
     }
 
     @Override

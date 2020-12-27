@@ -2,11 +2,11 @@ package org.appMain.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.appMain.entities.Courier;
 import org.appMain.entities.Product;
+import org.appMain.entities.Supplier;
 import org.appMain.entities.dto.DeliveryDTO;
-import org.appMain.services.CourierService;
 import org.appMain.services.ProductService;
+import org.appMain.services.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +20,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("supply")
-public class CourierController {
-    private final CourierService courierService;
+public class SupplierController {
+    private final SupplierService supplierService;
     private final ProductService productService;
 
     @Autowired
-    public CourierController(CourierService courierService, ProductService productService) {
-        this.courierService = courierService;
+    public SupplierController(SupplierService supplierService, ProductService productService) {
+        this.supplierService = supplierService;
         this.productService = productService;
     }
 
@@ -36,18 +36,18 @@ public class CourierController {
         DeliveryDTO deliver = gson.fromJson(deliverJson, DeliveryDTO.class);
         List<Product> toStorage = deliver.getProducts();
         List<Integer> prodQuantities = deliver.getProductQuantities();
-        Courier courier = deliver.getCourier();
+        Supplier supplier = deliver.getCourier();
 
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
 
-        courierService.addCourier(courier);
+        supplierService.addCourier(supplier);
         for (Product p : toStorage) {
             p.setDeliveryDate(currentDate);
-            p.setDeliveredBy(courier);
+            p.setDeliveredBy(supplier);
             productService.addProduct(p);
         }
-        courierService.addProductsToStorage(toStorage, prodQuantities);
+        supplierService.addProductsToStorage(toStorage, prodQuantities);
 
         return ResponseEntity.ok().build();
     }

@@ -2,6 +2,7 @@ package org.appMain.services;
 
 import org.appMain.entities.CustomUser;
 import org.appMain.repo.UserRepository;
+import org.appMain.utils.UserAlreadyExistsException;
 import org.appMain.utils.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,12 @@ public class UserService {
     }
 
     @Transactional
-    public boolean addUser(String firstName, String lastName, String login, String passHash, String email,
-                           UserRole role) {
+    public void addUser(String firstName, String lastName, String login, String passHash, String email,
+                        UserRole role) throws UserAlreadyExistsException {
         if (userRepository.existsByLogin(login))
-            return false;
+            throw new UserAlreadyExistsException();
 
         CustomUser user = new CustomUser(firstName, lastName, login, passHash, email, role);
         userRepository.save(user);
-        return true;
     }
 }

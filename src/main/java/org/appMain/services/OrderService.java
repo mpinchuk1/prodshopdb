@@ -1,10 +1,13 @@
 package org.appMain.services;
 
 import org.appMain.entities.*;
+import org.appMain.entities.dto.OrderDTO;
+import org.appMain.entities.dto.ProductToOrderDTO;
 import org.appMain.repo.OrderItemRepository;
 import org.appMain.repo.OrderRepository;
 import org.appMain.repo.ProductRepository;
 import org.appMain.repo.StorageRepository;
+import org.appMain.utils.NotEnoughQuantityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -36,46 +37,58 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(List<Product> requiredProducts, CustomUser customUser) {
-        logger.info("Trying to create new order for " + customUser.getLogin());
+    public void addOrder(Map<Long, Integer> toOrderMap, CustomUser customUser) throws NotEnoughQuantityException {
 
         List<OrderItem> toOrder = new ArrayList<>();
-        Map<String, Long> integerMap = requiredProducts.stream().collect(
-                Collectors.groupingBy(Product::getName, Collectors.counting()));
-        System.out.println(integerMap);
-        for (Map.Entry<String, Long> p : integerMap.entrySet()) {
-            String productName = p.getKey();
-            long productQty = p.getValue();
-            Product product = productRepository.findProductByName(productName);
-            Storage productItem = storageRepository.findByProduct(product);
+
+        for (Map.Entry<Long, Integer> p : toOrderMap.entrySet()) {
+            Long productId = p.getKey();
+            int productQty = p.getValue();
+
+            Product product = productRepository.findById(productId).orElseThrow();
+            Storage productItem = storageRepository.findByProductName(product.getName()).orElse(null);
             if (productItem == null) {
                 continue;
             }
-            saveNewQuantity(product, productItem, (int) productQty, toOrder);
+            saveNewQuantity(product, productItem, productQty, toOrder);
         }
 
-        if (toOrder.size() > 0) {
-            long orderId = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        saveOrder(toOrder, customUser);
+    }
 
-            Order order = new Order(orderId, toOrder, customUser);
-            toOrder.forEach(orderItem -> {
-                orderItem.setOrder(order);
-                orderItemRepository.save(orderItem);
-            });
-            order.setOrderItems(toOrder);
-            order.setCustomUser(customUser);
-            orderRepository.save(order);
+    @Transactional
+    public List<OrderDTO> getOrdersWithProductsForUser(CustomUser user) {
+        return convertToDto(orderRepository.findOrdersByCustomUser(user));
+    }
 
-            logger.info("New order has created: " + order);
+    @Transactional
+    public List<OrderDTO> getAllOrdersWithProducts() {
+        return convertToDto(orderRepository.findAll());
+    }
+
+    private List<OrderDTO> convertToDto(List<Order> orders) {
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderDTO orderDTO = new OrderDTO();
+            List<OrderItem> orderItems = order.getOrderItems();
+
+            for (OrderItem orderItem : orderItems) {
+                ProductToOrderDTO productToOrderDTO = new ProductToOrderDTO(orderItem.getProduct().getName(), orderItem.getQuantity());
+                orderDTO.getOrderedProducts().add(productToOrderDTO);
+            }
+            orderDTO.setId(order.getId());
+            orderDTO.setCustomerId(order.getCustomUser().getId());
+            orderDTO.setDateCreated(order.getOrderDate());
+            orderDTO.setPrice(order.getPrice());
+
+            orderDTOS.add(orderDTO);
         }
+        return orderDTOS;
     }
 
-    @Transactional(readOnly = true)
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
-
-    private void saveNewQuantity(Product product, Storage productItem, int requiredQty, List<OrderItem> toOrder) {
+    private void saveNewQuantity(Product product, Storage productItem, int requiredQty, List<OrderItem> toOrder)
+            throws NotEnoughQuantityException {
         int prodQuantity = productItem.getQuantity();
 
         if (prodQuantity >= requiredQty) {
@@ -88,6 +101,24 @@ public class OrderService {
             storageRepository.save(productItem);
         } else {
             logger.info("Not enough " + product.getName() + ". Need " + requiredQty + ", but there is only " + prodQuantity);
+            throw new NotEnoughQuantityException();
+        }
+    }
+
+    private void saveOrder(List<OrderItem> toOrder, CustomUser customUser) {
+        if (toOrder.size() > 0) {
+
+
+            Order order = new Order(toOrder, customUser);
+            for (OrderItem orderItem : toOrder) {
+                orderItem.setOrder(order);
+                orderItemRepository.save(orderItem);
+            }
+            order.setOrderItems(toOrder);
+            order.setCustomUser(customUser);
+            orderRepository.save(order);
+
+            logger.info("New order has created: " + order);
         }
     }
 }

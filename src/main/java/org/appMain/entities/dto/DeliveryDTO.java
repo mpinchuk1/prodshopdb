@@ -1,22 +1,22 @@
 package org.appMain.entities.dto;
 
-import org.appMain.entities.Courier;
 import org.appMain.entities.Product;
+import org.appMain.entities.Supplier;
 
 import java.util.List;
 
 public class DeliveryDTO {
     private List<Product> products;
     private List<Integer> productQuantities;
-    private Courier courier;
+    private Supplier supplier;
 
     public DeliveryDTO() {
     }
 
-    public DeliveryDTO(List<Product> products, List<Integer> productQuantities, Courier courier) {
+    public DeliveryDTO(List<Product> products, List<Integer> productQuantities, Supplier supplier) {
         this.products = products;
         this.productQuantities = productQuantities;
-        this.courier = courier;
+        this.supplier = supplier;
     }
 
     public List<Product> getProducts() {
@@ -35,11 +35,11 @@ public class DeliveryDTO {
         this.productQuantities = productQuantities;
     }
 
-    public Courier getCourier() {
-        return courier;
+    public Supplier getCourier() {
+        return supplier;
     }
 
-    public void setCourier(Courier courier) {
-        this.courier = courier;
+    public void setCourier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

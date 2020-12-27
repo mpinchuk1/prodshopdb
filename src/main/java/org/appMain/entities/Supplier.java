@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Courier {
+public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -13,10 +13,10 @@ public class Courier {
     @OneToMany(mappedBy = "deliveredBy")
     private List<Product> deliveryProducts;
 
-    public Courier() {
+    public Supplier() {
     }
 
-    public Courier(String lastName, String supplierCompanyName) {
+    public Supplier(String lastName, String supplierCompanyName) {
         this.lastName = lastName;
         this.supplierCompanyName = supplierCompanyName;
     }

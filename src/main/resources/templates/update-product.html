@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update product</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="align">
+    <form autocomplete="off" class="m-t"
+          data-toggle="validator" method="post" role="form" style="max-width: 350px; margin: 0 auto;"
+          th:action="@{/admin/products/update}" th:object="${product}">
+
+        <h2>Update product</h2>
+
+        <br>
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group input-group" style="min-width: 275px">
+            <label>Name</label>
+            <input class="form-control" placeholder="Name"
+                   th:value="*{name}"
+                   required th:field="*{name}" type="text"/>
+        </div>
+
+        <div class="form-group input-group" style="min-width: 275px">
+            <label>Price</label>
+            <input class="form-control" placeholder="Price"
+                   th:value="*{price}"
+                   required th:field="*{price}" type="number" min="0" step="0.01"/>
+        </div>
+
+        <div class="form-group input-group" style="min-width: 275px">
+            <label>Expire Date</label>
+            <input class="form-control" placeholder="yyyy-MM-dd"
+                   th:value="*{expireDate}"
+                   required th:field="*{expireDate}" type="text"/>
+        </div>
+
+        <div class="form-group input-group" style="min-width: 275px">
+            <label>Quantity</label>
+            <input class="form-control" placeholder="quantity"
+                   required th:field="*{quantity}" type="number" min="0" step="1"/>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="form-group">
+            <button class="btn btn-info btn-block"
+                    type="submit">Update
+            </button>
+            <span>  <a th:href="@{/admin/products}">Go back to products</a></span>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

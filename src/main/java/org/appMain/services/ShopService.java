@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShopService {
@@ -37,8 +38,8 @@ public class ShopService {
         for (Product p : products) {
             if (p.getExpireDate().before(this.currentDate)) {
                 logger.info("There is an expired product: " + p + ". \n It will be disposed of!");
-                Storage storage = storageRepository.findByProduct(p);
-                storageRepository.delete(storage);
+                Optional<Storage> storage = storageRepository.findByProductName(p.getName());
+                storage.ifPresent(storageRepository::delete);
             }
         }
     }

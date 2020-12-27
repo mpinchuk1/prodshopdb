@@ -10,11 +10,12 @@ import java.util.List;
 @Table(name = "orders")
 public class Order {
     @Id
+    @GeneratedValue
     private Long id;
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
     private Double price;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id")
     private CustomUser customUser;
     private Date orderDate;
@@ -24,8 +25,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, List<OrderItem> orderItems, CustomUser customUser) {
-        this.id = id;
+    public Order(List<OrderItem> orderItems, CustomUser customUser) {
+
         this.orderItems = orderItems;
         this.customUser = customUser;
         this.price = countPrice(orderItems);

@@ -40,6 +40,7 @@
                 <a th:href="@{/myorders}">My orders</a>
             </li>
 
+
             <li>
                 <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/orders}">Orders</a>
             </li>
@@ -49,6 +50,7 @@
             <li>
                 <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/users}">Users</a>
             </li>
+
 
             <li id="bottom">
                 <a id="bottommm" class="btn btn-info btn-lg" th:href="@{/logout}">
@@ -69,40 +71,44 @@
             <span class="hamb-middle"></span>
             <span class="hamb-bottom"></span>
         </button>
+
+
         <div class="container my-2">
-            <h1>Select products</h1>
-            <form class="form-signin" style="min-width: 350px; margin: 0 auto;" method="POST"
-                  th:action="@{/orders/create_page}" th:object="${fororder}">
-                <table border="2" class="table table-responsive-md">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th></th>
-                        <th>ID</th>
-                        <th>name</th>
-                        <th>price</th>
-                        <th>expireDate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="table-light" th:each="productdto : ${productdtos}">
-                        <td>
-                            <input th:value="${productdto.id}" th:field="${fororder.products}" type="checkbox">
-                        </td>
-                        <td th:text="${productdto.id}"></td>
-                        <td th:text="${productdto.name}"></td>
-                        <td th:text="${productdto.price}"></td>
-                        <td th:text="${productdto.expireDate}"></td>
-                    </tr>
-                    </tbody>
-                </table>
 
-                <div class="form-group">
-                    <button class="btn btn-info btn-block"
-                            type="submit">Create Order
-                    </button>
-                </div>
+            <h1>Products</h1>
 
-            </form>
+            <a style="display: inherit" th:href="@{/admin/products/new}" class="btn btn-primary">
+                Add product
+            </a>
+
+            <table border="2" class="table table-responsive-md">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>quantity</th>
+                    <th>name</th>
+                    <th>price</th>
+                    <th>deliveryDate</th>
+                    <th>expireDate</th>
+                    <th>supplierCompanyName</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-light" th:each="product : ${adproducts}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.quantity}"></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.price}"></td>
+                    <td th:text="${product.deliveryDate}"></td>
+                    <td th:text="${product.expireDate}"></td>
+                    <td th:text="${product.deliveredBy.supplierCompanyName}"></td>
+                    <td>
+                        <a th:href="@{/admin/products/update_page/{id}(id=${product.id})}" class="btn btn-primary">Update</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -483,5 +489,3 @@
     });
 });</script>
 </html>
-
-

@@ -1,12 +1,11 @@
 package org.appMain.entities.dto;
 
-import org.appMain.entities.Product;
-
 import java.util.List;
 
 public class CreateOrderDTO {
     private String customUser;
-    private List<Product> products;
+    private List<Long> products;
+    private List<Integer> quantities;
 
     public String getCustomUser() {
         return customUser;
@@ -16,11 +15,19 @@ public class CreateOrderDTO {
         this.customUser = customUser;
     }
 
-    public List<Product> getProducts() {
+    public List<Long> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<Long> products) {
         this.products = products;
+    }
+
+    public List<Integer> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(List<Integer> quantities) {
+        this.quantities = quantities;
     }
 }

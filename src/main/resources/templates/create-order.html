@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Order</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+</head>
+<body>
+<div class="container my-2">
+
+    <h1>Create Order</h1>
+    <br>
+    <h2>Select quantities</h2>
+    <br>
+    <form class="form-signin" style="min-width: 350px; margin: 0 auto;" method="POST"
+          th:action="@{/orders/create}" th:object="${createorder}">
+        <table border="2" class="table table-responsive-md">
+            <thead class="thead-dark">
+            <tr>
+                <th></th>
+                <th>In order quantity</th>
+                <th>In storage quantity</th>
+                <th>name</th>
+                <th>price</th>
+                <th>expireDate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="table-light" th:each="product : ${createorderproducts}">
+                <td>
+                    <label>
+                        <input th:value="${product.id}" th:field="${createorder.products}" type="checkbox"
+                               th:checked="on">
+                    </label>
+                </td>
+                <td>
+                    <input type="number" th:field="${createorder.quantities}" min="0" step="1">
+                </td>
+                <td th:text="${product.quantity}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${product.expireDate}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total price</td>
+                <td th:text="${totalprice}"></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <button class="btn btn-info btn-block"
+                    type="submit">Create order
+            </button>
+            <span> <a th:href="@{/}">Go back to products</a></span>
+        </div>
+    </form>
+
+    <div th:if="${param.error}">
+        <div class="alert alert-danger">Check quantities</div>
+    </div>
+</div>
+</body>
+</html>

@@ -69,45 +69,39 @@
             <span class="hamb-middle"></span>
             <span class="hamb-bottom"></span>
         </button>
+
+
         <div class="container my-2">
-            <h1>Select products</h1>
-            <form class="form-signin" style="min-width: 350px; margin: 0 auto;" method="POST"
-                  th:action="@{/orders/create_page}" th:object="${fororder}">
-                <table border="2" class="table table-responsive-md">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th></th>
-                        <th>ID</th>
-                        <th>name</th>
-                        <th>price</th>
-                        <th>expireDate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="table-light" th:each="productdto : ${productdtos}">
-                        <td>
-                            <input th:value="${productdto.id}" th:field="${fororder.products}" type="checkbox">
-                        </td>
-                        <td th:text="${productdto.id}"></td>
-                        <td th:text="${productdto.name}"></td>
-                        <td th:text="${productdto.price}"></td>
-                        <td th:text="${productdto.expireDate}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <h1>Users</h1>
 
-                <div class="form-group">
-                    <button class="btn btn-info btn-block"
-                            type="submit">Create Order
-                    </button>
-                </div>
-
-            </form>
+            <table border="1" class="table table-responsive-md">
+                <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>login</th>
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>email</th>
+                    <th>role</th>
+                    <th>registrationDate</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-light" th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.login}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td th:text="${user.registrationDate}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+
+
     </div>
-
-
-</div>
 </body>
 
 <style>
@@ -483,5 +477,3 @@
     });
 });</script>
 </html>
-
-
