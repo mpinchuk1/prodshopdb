@@ -8,6 +8,7 @@ import org.appMain.repo.OrderRepository;
 import org.appMain.repo.ProductRepository;
 import org.appMain.repo.StorageRepository;
 import org.appMain.utils.NotEnoughQuantityException;
+import org.appMain.utils.ProductNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(Map<Long, Integer> toOrderMap, CustomUser customUser) throws NotEnoughQuantityException {
+    public void addOrder(Map<Long, Integer> toOrderMap, CustomUser customUser) throws NotEnoughQuantityException, ProductNotFoundException {
 
         List<OrderItem> toOrder = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class OrderService {
             Long productId = p.getKey();
             int productQty = p.getValue();
 
-            Product product = productRepository.findById(productId).orElseThrow();
+            Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
             Storage productItem = storageRepository.findByProductName(product.getName()).orElse(null);
             if (productItem == null) {
                 continue;

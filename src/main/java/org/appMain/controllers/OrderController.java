@@ -10,8 +10,8 @@ import org.appMain.repo.StorageRepository;
 import org.appMain.security.CustomUserDetails;
 import org.appMain.services.OrderService;
 import org.appMain.services.ProductService;
-import org.appMain.services.UserService;
 import org.appMain.utils.NotEnoughQuantityException;
+import org.appMain.utils.ProductNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +34,13 @@ public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     private final OrderService orderService;
-    private final UserService userService;
     private final ProductService productService;
     private final StorageRepository storageRepository;
 
     @Autowired
-    public OrderController(OrderService orderService, UserService userService, ProductService productService,
+    public OrderController(OrderService orderService, ProductService productService,
                            StorageRepository storageRepository) {
         this.orderService = orderService;
-        this.userService = userService;
         this.productService = productService;
         this.storageRepository = storageRepository;
     }
@@ -56,8 +54,8 @@ public class OrderController {
 
         try {
             orderService.addOrder(toOrder, customUser);
-        } catch (NotEnoughQuantityException exception) {
-            return "redirect:/";
+        } catch (NotEnoughQuantityException | ProductNotFoundException exception) {
+            return "redirect:/?error";
         }
         return "redirect:/myorders";
     }
