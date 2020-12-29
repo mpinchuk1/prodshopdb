@@ -110,6 +110,11 @@
                 </tbody>
             </table>
         </div>
+
+        <div th:if="${param.updateerror}">
+            <div class="alert alert-danger">Update error. Product not found</div>
+        </div>
+
     </div>
 
 

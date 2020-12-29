@@ -52,9 +52,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void update(AddProductDTO productForUpdate) {
+    public void update(AddProductDTO productForUpdate) throws ProductAlreadyExistsException {
         int quantity = productForUpdate.getQuantity();
-        Product product = productRepository.findById(productForUpdate.getId()).orElseThrow();
+        Product product = productRepository.findById(productForUpdate.getId()).orElseThrow(ProductAlreadyExistsException::new);
         product.setName(productForUpdate.getName());
         product.setPrice(productForUpdate.getPrice());
         product.setExpireDate(productForUpdate.getExpireDate());

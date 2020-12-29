@@ -106,6 +106,18 @@
                     <div class="alert alert-danger">Not enough products. Check quantities</div>
                 </div>
 
+                <div th:if="${param.selectprod}">
+                    <div class="alert alert-danger">Please select at least 1 product</div>
+                </div>
+
+                <div th:if="${param.notfound}">
+                    <div class="alert alert-danger">Product not found</div>
+                </div>
+
+                <div th:if="${param.ordererror}">
+                    <div class="alert alert-danger">Empty order. Check quantities and checkboxes</div>
+                </div>
+
             </form>
         </div>
     </div>

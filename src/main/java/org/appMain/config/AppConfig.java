@@ -55,8 +55,8 @@ public class AppConfig {
             Product p5 = new Product("pill", 212d, new Date(2123333423423L), supplier2);
             Product p6 = new Product("bread", 2d, new Date(3121333333333L), supplier2);
             Product p7 = new Product("cola", 1111d, new Date(1133333333213L), supplier1);
-            Product p8 = new Product("bear", 11123121d, new Date(1133333333213L), supplier1);
-            Product p9 = new Product("vodka", 1d, new Date(3133333333213L), supplier1);
+            Product p8 = new Product("sprite", 167d, new Date(1133333333213L), supplier1);
+            Product p9 = new Product("fanta", 1d, new Date(3133333333213L), supplier1);
 
             Calendar calendar = Calendar.getInstance();
             java.util.Date currentDate = calendar.getTime();

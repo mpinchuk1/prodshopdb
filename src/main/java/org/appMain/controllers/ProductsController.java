@@ -78,7 +78,11 @@ public class ProductsController {
 
     @PostMapping("admin/products/update")
     public String updateProduct(@ModelAttribute("product") AddProductDTO product) {
-        productService.update(product);
+        try {
+            productService.update(product);
+        } catch (ProductAlreadyExistsException e) {
+            return "redirect:/admin/products?updateerror";
+        }
         return "redirect:/admin/products";
     }
 

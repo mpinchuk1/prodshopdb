@@ -7,6 +7,13 @@ public class CreateOrderDTO {
     private List<Long> products;
     private List<Integer> quantities;
 
+    public CreateOrderDTO() {
+    }
+
+    public CreateOrderDTO(List<Long> products) {
+        this.products = products;
+    }
+
     public String getCustomUser() {
         return customUser;
     }

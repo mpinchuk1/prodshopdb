@@ -50,12 +50,17 @@ public class OrderController {
         CustomUser customUser = getCurrentUser().getUser();
         logger.info("handling post request for createOrder from " + customUser.getLogin());
 
+        if (createOrder.getProducts().size() < 1 || createOrder.getQuantities().size() < 1)
+            return "redirect:/?ordererror";
+
         Map<Long, Integer> toOrder = createToOrderMap(createOrder.getProducts(), createOrder.getQuantities());
 
         try {
             orderService.addOrder(toOrder, customUser);
-        } catch (NotEnoughQuantityException | ProductNotFoundException exception) {
+        } catch (NotEnoughQuantityException exception) {
             return "redirect:/?error";
+        } catch (ProductNotFoundException exception) {
+            return "redirect:/?notfound";
         }
         return "redirect:/myorders";
     }
@@ -63,7 +68,11 @@ public class OrderController {
     @PostMapping("orders/create_page")
     public String createOrderPage(@ModelAttribute("fororder") CreateOrderDTO createOrder,
                                   Model model) {
-        double totalPrice = 0;
+
+        if (createOrder.getProducts().size() < 1) {
+            return "redirect:/?selectprod";
+        }
+
         List<ProductDTO> productToOrder = new ArrayList<>();
         for (Long id : createOrder.getProducts()) {
             Product product = productService.findById(id);
@@ -71,13 +80,11 @@ public class OrderController {
             Double productPrice = product.getPrice();
             productToOrder.add(new ProductDTO(product.getId(), product.getName(),
                     productPrice, product.getExpireDate(), storage.getQuantity()));
-
-            totalPrice += productPrice;
         }
 
         model.addAttribute("createorderproducts", productToOrder);
         model.addAttribute("createorder", new CreateOrderDTO());
-        model.addAttribute("totalprice", totalPrice);
+
         return "create-order";
     }
 
