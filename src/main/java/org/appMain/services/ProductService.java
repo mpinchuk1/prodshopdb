@@ -95,6 +95,15 @@ public class ProductService {
         return storageRepository.findByProductName(productName);
     }
 
+    public AddProductDTO getAddProductDTO(Long id) {
+        Product product = findById(id);
+        Storage storage = findStorageByProductName(product.getName()).orElse(new Storage());
+        return new AddProductDTO(product.getId(),
+                product.getName(), product.getPrice(),
+                product.getExpireDate(),
+                product.getDeliveredBy().getSupplierCompanyName(), storage.getQuantity());
+    }
+
     private void saveToStorage(Product product, int quantity) {
         Storage storageItem = storageRepository.findByProductName(product.getName()).orElse(new Storage());
         storageItem.setProduct(product);

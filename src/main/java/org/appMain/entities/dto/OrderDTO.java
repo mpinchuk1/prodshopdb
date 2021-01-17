@@ -1,5 +1,6 @@
 package org.appMain.entities.dto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,14 +10,14 @@ public class OrderDTO {
     private Long id;
     private Long customerId;
     private Date dateCreated;
-    private Double price;
+    private BigDecimal price;
     private List<ProductToOrderDTO> orderedProducts;
 
     public OrderDTO() {
         this.orderedProducts = new ArrayList<>();
     }
 
-    public OrderDTO(Long id, Long customerId, Date dateCreated, Double price, List<ProductToOrderDTO> orderedProducts) {
+    public OrderDTO(Long id, Long customerId, Date dateCreated, BigDecimal price, List<ProductToOrderDTO> orderedProducts) {
         this.id = id;
         this.customerId = customerId;
         this.dateCreated = dateCreated;
@@ -48,11 +49,11 @@ public class OrderDTO {
         this.dateCreated = dateCreated;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

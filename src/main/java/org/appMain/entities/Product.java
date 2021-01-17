@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Double price;
+    private BigDecimal price;
     @JsonFormat(pattern = "MMM dd, yyyy")
     private Date deliveryDate;
     @JsonFormat(pattern = "MMM dd, yyyy")
@@ -30,7 +31,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, Date expireDate, Supplier deliveredBy) {
+    public Product(String name, BigDecimal price, Date expireDate, Supplier deliveredBy) {
         this.name = name;
         this.price = price;
         this.deliveryDate = new Date();
@@ -46,7 +47,7 @@ public class Product {
         return name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -74,7 +75,7 @@ public class Product {
         this.name = name;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

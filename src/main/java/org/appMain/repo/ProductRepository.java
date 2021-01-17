@@ -11,6 +11,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.name = :name")
     Product findProductByName(@Param("name") String name);
 
-    @Query("SELECT p FROM Product p INNER JOIN Storage s ON p.id = s.product WHERE s.quantity > 0")
+    @Query("SELECT p FROM Product p INNER JOIN Storage s ON p.id = s.product.id WHERE s.quantity > 0")
     List<Product> getProductsInStock();
 }

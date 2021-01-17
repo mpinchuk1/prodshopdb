@@ -1,8 +1,6 @@
 package org.appMain.controllers;
 
 import org.appMain.entities.CustomUser;
-import org.appMain.entities.Product;
-import org.appMain.entities.Storage;
 import org.appMain.entities.Supplier;
 import org.appMain.entities.dto.AddProductDTO;
 import org.appMain.entities.dto.CreateOrderDTO;
@@ -65,14 +63,8 @@ public class ProductsController {
 
     @GetMapping("admin/products/update_page/{id}")
     public String updateProductPage(@PathVariable("id") Long id, Model model) {
-        Product product = productService.findById(id);
-        Storage storage = productService.findStorageByProductName(product.getName()).orElse(new Storage());
-        AddProductDTO addProductDTO = new AddProductDTO(product.getId(),
-                product.getName(), product.getPrice(),
-                product.getExpireDate(),
-                product.getDeliveredBy().getSupplierCompanyName(), storage.getQuantity());
-
-        model.addAttribute("product", addProductDTO);
+        logger.info("Trying to update product with id: " + id);
+        model.addAttribute("product", productService.getAddProductDTO(id));
         return "update-product";
     }
 
@@ -100,7 +92,7 @@ public class ProductsController {
 
     @PostMapping("admin/products/new")
     public String addProduct(@ModelAttribute("product") AddProductDTO addProductDTO) {
-
+        logger.info("Trying to add new product: " + addProductDTO);
         try {
             productService.addProduct(addProductDTO);
         } catch (ProductAlreadyExistsException exception) {

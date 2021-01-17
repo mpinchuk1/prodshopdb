@@ -2,6 +2,7 @@ package org.appMain.services;
 
 import org.appMain.entities.*;
 import org.appMain.entities.dto.OrderDTO;
+import org.appMain.entities.dto.ProductDTO;
 import org.appMain.entities.dto.ProductToOrderDTO;
 import org.appMain.repo.OrderItemRepository;
 import org.appMain.repo.OrderRepository;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,18 @@ public class OrderService {
         return convertToDto(orderRepository.findAll());
     }
 
+    public List<ProductDTO> createProdsToOrder(List<Long> products) {
+        List<ProductDTO> productToOrder = new ArrayList<>();
+        for (Long id : products) {
+            Product product = productRepository.findById(id).orElse(new Product());
+            Storage storage = storageRepository.findByProductName(product.getName()).orElse(new Storage());
+            BigDecimal productPrice = product.getPrice();
+            productToOrder.add(new ProductDTO(product.getId(), product.getName(),
+                    productPrice, product.getExpireDate(), storage.getQuantity()));
+        }
+        return productToOrder;
+    }
+
     private List<OrderDTO> convertToDto(List<Order> orders) {
         List<OrderDTO> orderDTOS = new ArrayList<>();
 
@@ -75,7 +89,8 @@ public class OrderService {
             List<OrderItem> orderItems = order.getOrderItems();
 
             for (OrderItem orderItem : orderItems) {
-                ProductToOrderDTO productToOrderDTO = new ProductToOrderDTO(orderItem.getProduct().getName(), orderItem.getQuantity());
+                ProductToOrderDTO productToOrderDTO = new ProductToOrderDTO(orderItem.getProduct().getName(),
+                        orderItem.getQuantity());
                 orderDTO.getOrderedProducts().add(productToOrderDTO);
             }
             orderDTO.setId(order.getId());
@@ -108,8 +123,6 @@ public class OrderService {
 
     private void saveOrder(List<OrderItem> toOrder, CustomUser customUser) {
         if (toOrder.size() > 0) {
-
-
             Order order = new Order(toOrder, customUser);
             for (OrderItem orderItem : toOrder) {
                 orderItem.setOrder(order);

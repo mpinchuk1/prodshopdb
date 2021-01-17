@@ -2,19 +2,20 @@ package org.appMain.entities.dto;
 
 import org.appMain.entities.Supplier;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProductDTO {
 
     private Long id;
     private String name;
-    private Double price;
+    private BigDecimal price;
     private Date deliveryDate;
     private Date expireDate;
     private Supplier deliveredBy;
     private int quantity;
 
-    public ProductDTO(Long id, String name, Double price, Date deliveryDate, Date expireDate, Supplier deliveredBy, int quantity) {
+    public ProductDTO(Long id, String name, BigDecimal price, Date deliveryDate, Date expireDate, Supplier deliveredBy, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -24,7 +25,7 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public ProductDTO(Long id, String name, Double price, Date expireDate, int quantity) {
+    public ProductDTO(Long id, String name, BigDecimal price, Date expireDate, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -51,11 +52,11 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

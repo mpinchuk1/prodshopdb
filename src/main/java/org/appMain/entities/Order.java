@@ -2,6 +2,7 @@ package org.appMain.entities;
 
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Order {
     private Long id;
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
-    private Double price;
+    private BigDecimal price;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id")
     private CustomUser customUser;
@@ -33,8 +34,12 @@ public class Order {
         this.orderDate = c.getTime();
     }
 
-    public double countPrice(List<OrderItem> orderItems) {
-        return orderItems.stream().mapToDouble(orderItem -> orderItem.getProduct().getPrice()).sum();
+    public BigDecimal countPrice(List<OrderItem> orderItems) {
+        BigDecimal totalPrice = new BigDecimal(0);
+        for (OrderItem or : orderItems) {
+            totalPrice = totalPrice.add(or.getProduct().getPrice());
+        }
+        return totalPrice;
     }
 
     public Long getId() {
@@ -53,11 +58,11 @@ public class Order {
         this.orderItems = orderItems;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

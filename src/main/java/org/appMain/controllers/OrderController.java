@@ -1,15 +1,10 @@
 package org.appMain.controllers;
 
 import org.appMain.entities.CustomUser;
-import org.appMain.entities.Product;
-import org.appMain.entities.Storage;
 import org.appMain.entities.dto.CreateOrderDTO;
 import org.appMain.entities.dto.OrderDTO;
-import org.appMain.entities.dto.ProductDTO;
-import org.appMain.repo.StorageRepository;
 import org.appMain.security.CustomUserDetails;
 import org.appMain.services.OrderService;
-import org.appMain.services.ProductService;
 import org.appMain.utils.NotEnoughQuantityException;
 import org.appMain.utils.ProductNotFoundException;
 import org.slf4j.Logger;
@@ -22,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,19 +28,15 @@ public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     private final OrderService orderService;
-    private final ProductService productService;
-    private final StorageRepository storageRepository;
 
     @Autowired
-    public OrderController(OrderService orderService, ProductService productService,
-                           StorageRepository storageRepository) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.productService = productService;
-        this.storageRepository = storageRepository;
     }
 
     @PostMapping("orders/create")
     public String createOrder(@ModelAttribute("createorder") CreateOrderDTO createOrder) {
+
         CustomUser customUser = getCurrentUser().getUser();
         logger.info("handling post request for createOrder from " + customUser.getLogin());
 
@@ -68,21 +58,11 @@ public class OrderController {
     @PostMapping("orders/create_page")
     public String createOrderPage(@ModelAttribute("fororder") CreateOrderDTO createOrder,
                                   Model model) {
-
-        if (createOrder.getProducts().size() < 1) {
+        if (createOrder.getProducts().size() < 1)
             return "redirect:/?selectprod";
-        }
 
-        List<ProductDTO> productToOrder = new ArrayList<>();
-        for (Long id : createOrder.getProducts()) {
-            Product product = productService.findById(id);
-            Storage storage = storageRepository.findByProductName(product.getName()).orElse(new Storage());
-            Double productPrice = product.getPrice();
-            productToOrder.add(new ProductDTO(product.getId(), product.getName(),
-                    productPrice, product.getExpireDate(), storage.getQuantity()));
-        }
-
-        model.addAttribute("createorderproducts", productToOrder);
+        model.addAttribute("createorderproducts",
+                orderService.createProdsToOrder(createOrder.getProducts()));
         model.addAttribute("createorder", new CreateOrderDTO());
 
         return "create-order";

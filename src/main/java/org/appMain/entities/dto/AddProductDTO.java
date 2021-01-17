@@ -1,17 +1,18 @@
 package org.appMain.entities.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class AddProductDTO {
 
     private Long id;
     private String name;
-    private Double price;
+    private BigDecimal price;
     private Date expireDate;
     private String deliveredBy;
     private int quantity;
 
-    public AddProductDTO(Long id, String name, Double price, Date expireDate, String deliveredBy, int quantity) {
+    public AddProductDTO(Long id, String name, BigDecimal price, Date expireDate, String deliveredBy, int quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -39,11 +40,11 @@ public class AddProductDTO {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

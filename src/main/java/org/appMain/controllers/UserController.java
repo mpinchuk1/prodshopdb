@@ -3,11 +3,9 @@ package org.appMain.controllers;
 import org.appMain.entities.dto.UserDTO;
 import org.appMain.services.UserService;
 import org.appMain.utils.UserAlreadyExistsException;
-import org.appMain.utils.UserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,15 +18,14 @@ import javax.validation.Valid;
 
 @Controller
 public class UserController {
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("admin/users")
@@ -52,15 +49,11 @@ public class UserController {
     public String register(@ModelAttribute("user") @Valid UserDTO userDto, BindingResult bindingResult) {
         logger.info("handling register user request: " + userDto.getLogin());
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
             return "register";
-        }
-        String password = userDto.getPassword();
-        String passHash = passwordEncoder.encode(password);
 
         try {
-            userService.addUser(userDto.getFirstName(), userDto.getLastName(),
-                    userDto.getLogin(), passHash, userDto.getEmail(), UserRole.USER);
+            userService.addUser(userDto);
         } catch (UserAlreadyExistsException exception) {
             return "redirect:/register?error";
         }
